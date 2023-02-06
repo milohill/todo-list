@@ -1,0 +1,22 @@
+{
+  "name": "todo-list",
+  "version": "1.0.0",
+  "description": "a todo app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/milohill/todo-list.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/milohill/todo-list/issues"
+  },
+  "homepage": "https://github.com/milohill/todo-list#readme",
+  "dependencies": {
+    "date-fns": "^2.29.3"
+  }
+}

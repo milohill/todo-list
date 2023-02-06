@@ -1,133 +1,154 @@
-// import { format, compareAsc } from 'date-fns';
-
 // hash value generator
 function generateHash() {
   return Math.random().toString(16).slice(2);
 }
 
 // todo item structurer
-function Item() {
-  let content = '';
-  let date = '';
-  let star = false;
-  const hash = generateHash(); // to single one out later
+  function Item() {
+    const content = '';
+    const date = '';
+    const finished = false;
+    const star = false;
+    const hash = generateHash(); // a hash value to make it easier to single one out later
 
-  const getContent = () => content;
-  const setContent = (str) => {
-    content = str;
-  };
-
-  const getDate = () => date;
-  const setDate = (str) => {
-    date = str;
-  };
-
-  const getHash = () => hash;
-
-  const setStar = (value) => {
-    star = value;
+    return {
+      content,
+      date,
+      finished,
+      star,
+      hash
+    }
   }
-  const getStar = () => star;
-
-  return {
-    getContent,
-    setContent,
-    getDate,
-    setDate,
-    getHash,
-    setStar,
-    getStar
-  }
-}
 
 // project structurer
 function Project() {
-  let title = '';
-  let unfinishedItems = []; // let variable to make it so it's easier to reassign
-  const finishedItems = [];
-  const hash = generateHash(); // to single one out later
+  const title = '';
+  let items = []; // assign with let to make it so it's easier to reassign
+  const hash = generateHash(); // a hash value to make it easier to single one out later
 
-  const getTitle = () => title;
-  const setTitle = (str) => {
-    title = str;
+  const getItems = () => items;
+  const addItem = (item) => {
+    items.push(item);
+  }
+  
+  const editItem = (itemHashValue, content='', date='') => {
+    const itemToEdit = items.find(item => item.hash === itemHashValue);
+    const filteredItems = items.filter(item => item.hash !== itemHashValue);
+    itemToEdit.content = content;
+    itemToEdit.date = date;
+    filteredItems.push(itemToEdit);
+    items = filteredItems;
   }
 
-  const getItems = () => unfinishedItems;
-  const setItem = (item) => {
-    unfinishedItems.push(item);
+  const finishItem = (itemHashValue, boolean) => {
+    const itemToFinish = items.find(item => item.hash === itemHashValue);
+    const filteredItems = items.filter(item => item.hash !== itemHashValue);
+    itemToFinish.finished = boolean
+    filteredItems.push(itemToFinish);
+    items = filteredItems;
   }
+
+  const starItem = (itemHashValue, boolean) => {
+    const itemToStar = items.find(item => item.hash === itemHashValue);
+    const filteredItems = items.filter(item => item.hash !== itemHashValue);
+    itemToStar.star = boolean;
+    filteredItems.push(itemToStar);
+    items = filteredItems;
+  }
+
   const deleteItem = (itemHashValue) => {
-    const filteredItems = unfinishedItems.filter(item => item.getHash() !== itemHashValue);
-    unfinishedItems = filteredItems; // reassign the filtered items to the items array
+    const filteredItems = items.filter(item => item.hash !== itemHashValue);
+    items = filteredItems; // reassign the filtered items to the items array
   }
-  const finishItem = (itemHashValue) => {
-    const finishedItem = unfinishedItems.filter(item => item.getHash() === itemHashValue);
-    finishedItems.push(finishedItem);
-
-    const filteredItems = unfinishedItems.filter(item => item.getHash() !== itemHashValue);
-    unfinishedItems = filteredItems; // reassign the filtered items to the items array
-  }
-
-  const getHash = () => hash;
 
   return {
-    getTitle,
-    setTitle,
+    title,
     getItems,
-    setItem,
-    deleteItem,
+    addItem,
+    editItem,
     finishItem,
-    getHash
+    starItem,
+    deleteItem,
+    hash
   }
 }
 
 // information holder for todo items and projects
 function Board() {
-  const projects = [];
+  let projects = [];
 
   const getProjects = () => projects;
-  const setProject = (project) => {
+  const addProject = (project) => {
     projects.push(project);
   }
-  const getSelectedProject = (projectHashValue) => projects.filter(project => project.getHash() === projectHashValue);
+  const deleteProject = (projectHashValue) => {
+    const filteredProjects = projects.filter(project => project.hash !== projectHashValue);
+    projects = filteredProjects;
+  }
+  const findProject = (projectHashValue) => {
+    const filteredProjects = projects.filter(project => project.hash === projectHashValue);
+    return filteredProjects;
+  }
 
   return {
     getProjects,
-    setProject,
-    getSelectedProject
+    addProject,
+    deleteProject,
+    findProject
   }
 }
 
 // controller
 function Controller() {
   const mainBoard = Board();
-  const defaultProject = Project();
-  
-  defaultProject.setTitle('Default Project');
-  mainBoard.setProject(defaultProject);
 
-  const createItem = (projectHashValue, content='', date='') => {
+  // create a default project
+  const defaultProject = Project();
+  defaultProject.title = 'Default Project';
+
+  mainBoard.addProject(defaultProject);
+
+  // currently focused project
+  let currentProject = defaultProject;
+
+  const createItem = (content='', date='') => {
     const newItem = Item();
-    newItem.setContent(content);
-    newItem.setDate(date);
-    mainBoard.getSelectedProject(projectHashValue).setItem(newItem);
+    newItem.content = content;
+    newItem.date = date;
+    currentProject.addItem(newItem);
   }
 
   const createProject = (title='') => {
     const newProject = Project();
-    newProject.setTitle(title);
-    mainBoard.setProject(newProject);
+    newProject.title = title;
+    mainBoard.addProject(newProject);
   }
 
-  const showProjects = () => mainBoard.getProjects();
+  const deleteProject = () => {
+    const { hash } = currentProject;
+    mainBoard.deleteProject(hash);
+    currentProject = undefined;
+  }
+
+  const editProject = (title) => {
+    currentProject.title = title;
+  }
+
+  const getCurrentProject = () => currentProject; // to utilize manipulation for the current project
+  const showEntireProject = () => mainBoard.getProjects();
+  const switchProject = (projectHashValue) => {
+    [currentProject] = mainBoard.findProject(projectHashValue); // assign the first element of the array
+  }
 
   return {
     createItem,
     createProject,
-    showProjects,
+    deleteProject,
+    editProject,
+    showEntireProject,
+    getCurrentProject,
+    switchProject
   };
 }
 
-function ScreenController() {
-  const controller = Controller();
-}
+const list = Controller();

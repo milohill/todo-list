@@ -6,41 +6,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Todo List</title>
     <link rel="stylesheet" href="style.css" />
-    <script src="app.js"></script>
+    <script src="app.js" defer></script>
   </head>
   <body>
+      <div class="item-add-window window">
+        <input type="text" class="item-content">
+        <input type="date" class="item-date">
+        <input type="checkbox" name="" id="item-star" class="item-star">
+        <button class="close">X</button>
+        <button class="add">Add</button>
+      </div>
+      <div class="item-edit-window"></div>
+      </div>
     <div class="header">
-      <div class="logo">Todo</div>
+      <div class="logo">
+        <img src="./images/logo.svg" alt="" width="50px" />
+        <span>TODO</span>
+      </div>
     </div>
-    <div class="content">
-      <div class="project">
-        <h1 class="project-name">Default</h1>
-        <div class="container">
-          <div class="item">
-            <div class="content">Finish it!</div>
-            <div class="date">Date!</div>
-            <input type="checkbox" class="finished">
-            <button class="star"></button>
+    <div class="sidebar">
+      <input type="text" placeholder="project title" class="project-title-input" size="30">
+      <button class="project-add-button">+ project</button>
+      <div class="projects">
+        <div class="project">
+          <div class="project-text">
+            <p class="title">Default Project</p>
           </div>
-          <div class="item"></div>
-          <div class="item"></div>
-          <div class="item"></div>
-          <div class="item"></div>
-          <div class="item"></div>
-          <div class="item"></div>
-          <div class="item"></div>
-          <div class="item"></div>
-          <div class="item"></div>
-          <div class="item"></div>
-          <div class="item"></div>
-          <div class="item"></div>
-          <div class="item"></div>
+          <div class="project-buttons">
+            <button class="project-edit">
+              <img src="./images/edit.svg" alt="" width="20px" />
+            </button>
+            <button class="project-delete">
+              <img src="./images/delete.svg" alt="" width="20px" />
+            </button>
+          </div>
         </div>
-        <button>Add item</button>
+        <div class="project"></div>
+        <div class="project"></div>
+        <div class="project"></div>
+      </div>
+    </div>
+    <div class="main">
+      <button class="item-add-button">+ item</button>
+      <div class="items">
+        <div class="item" data-hash="222">
+          <div class="item-text">
+            <p class="content">Lorem, ipsum dolor.</p>
+            <p class="date">By 2023-02-07</p>
+          </div>
+          <div class="item-buttons">
+            <button class="item-star">
+              <img src="./images/unstar.svg" alt="" width="20px" />
+            </button>
+            <button class="item-finished">
+              <img src="./images/check.svg" alt="" width="20px" />
+            </button>
+            <button class="item-edit">
+              <img src="./images/edit.svg" alt="" width="20px" />
+            </button>
+            <button class="item-delete">
+              <img src="./images/delete.svg" alt="" width="20px" />
+            </button>
+          </div>
+        </div>
+        <div class="item"></div>
+        <div class="item"></div>
+        <div class="item"></div>
       </div>
     </div>
     <div class="footer">
-      <a href="https://github.com/milohill">Github</a>
+      <a href="https://github.com/milohill">
+        <img src="./images/github.svg" alt="" width="25px"/>
+      </a>
     </div>
   </body>
 </html>

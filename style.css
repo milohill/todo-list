@@ -3,48 +3,129 @@
    License: none (public domain)
 */
 
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
-	display: block;
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
 }
 body {
-	line-height: 1;
+  line-height: 1;
 }
-ol, ul {
-	list-style: none;
+ol,
+ul {
+  list-style: none;
 }
-blockquote, q {
-	quotes: none;
+blockquote,
+q {
+  quotes: none;
 }
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: '';
-	content: none;
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
 }
 table {
-	border-collapse: collapse;
-	border-spacing: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
 body {
@@ -60,40 +141,172 @@ body {
   height: 100vh;
 }
 
-body > div {
-  border: 1px solid black;
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
 }
 
-/* header */
+/* custom css starts here */
+body {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  grid-template-rows: 50px 1fr 30px;
 
-/* content */
-.content {
-  height: auto;
-  padding: 50px;
+  height: 100vh;
+
+  overflow: hidden;
+
+  position: relative;
 }
 
-.content .project {
-  border: 1px solid black;
+/* header and footer */
+.header {
+  background-color: #1c315e;
+  grid-column: 1 / span 2;
+  grid-row: 1;
+}
 
-  width: 200px;
-  height: 600px;
+.header .logo {
+  display: flex;
+  align-self: center;
+}
+
+.header .logo span {
+  font-size: 2.5em;
+  color: white;
 
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 30px;
 }
 
-.content .container {
-  height: 500px;
+.footer {
+  background-color: gray;
+  grid-column: 1 / span 2;
+  grid-row: 3;
+
+  display: flex;
+  justify-content: center;
+  padding: 3px;
+}
+
+/* side bar */
+.sidebar {
+  background-color: lightgray;
+  grid-column: 1;
+  grid-row: 2 / 3;
+
+  padding: 20px;
+
+  box-shadow: 2px 2px 5px lightgray;
+}
+
+.sidebar .projects {
+  max-height: 600px;
   overflow: auto;
 }
 
-.content .item {
-  border: 1px solid black;
-
-  width: 150px;
+.sidebar .project {
+  border-bottom: 1px solid black;
   height: 50px;
+  margin: 20px;
 
-  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar .project .title {
+  font-size: 1.5em;
+}
+
+.sidebar .project .project-buttons {
+  display: flex;
+}
+
+.sidebar .project-add-button {
+  border: none;
+
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.highlighted {
+  background-color: aqua;
+}
+
+.visible {
+  opacity: 1 !important;
+}
+
+/* content */
+.main {
+  grid-column: 2;
+  grid-row: 2 / 3;
+
+  padding: 20px 80px;
+}
+
+.main .item-add-button {
+  border: none;
+
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.main .items {
+  max-height: 600px;
+  overflow: auto;
+}
+
+.main .item {
+  border-bottom: 1px solid black;
+  height: 50px;
+  margin: 20px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.main .item .item-text {
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+}
+
+.main .item .content {
+  font-size: 1.2em;
+}
+
+.main .item .date {
+  font-size: 0.8em;
+}
+
+.main .item-buttons button,
+.sidebar .project-buttons button {
+  border: none;
+  cursor: pointer;
+  appearance: none;
+  background-color: inherit;
+}
+
+/* windows */
+
+.item-add-window {
+  width: 500px;
+  height: 300px;
+
+  background-color: white;
+  border-radius: 10px;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* to center the window */
+
+  box-shadow: 1px 1px 50px gray;
+
+  opacity: 0;
 }

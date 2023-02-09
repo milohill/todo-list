@@ -118,6 +118,11 @@ function Controller() {
     currentProject.addItem(newItem);
   }
 
+  // dummy default items
+  createItem('Item One', '2022-11-11');
+  createItem('Item Two', '2022-11-12');
+  createItem('Item Three', '2022-11-31');
+
   const createProject = (title='') => {
     const newProject = Project();
     newProject.title = title;
@@ -134,8 +139,8 @@ function Controller() {
     currentProject.title = title;
   }
 
-  const getCurrentProject = () => currentProject; // to utilize manipulation for the current project
-  const showEntireProject = () => mainBoard.getProjects();
+  const getProjectController = () => currentProject; // to utilize manipulation for the current project
+  const getEntireProject = () => mainBoard.getProjects();
   const switchProject = (projectHashValue) => {
     [currentProject] = mainBoard.findProject(projectHashValue); // assign the first element of the array
   }
@@ -145,10 +150,165 @@ function Controller() {
     createProject,
     deleteProject,
     editProject,
-    showEntireProject,
-    getCurrentProject,
+    getEntireProject,
+    getProjectController,
     switchProject
   };
 }
 
-const list = Controller();
+let list;
+
+function ScreenController() {
+  const controller = Controller();
+  const projectsDiv = document.querySelector('.projects');
+  const projectTitleInput = document.querySelector('.project-title-input');
+  const projectAddButton = document.querySelector('.project-add-button');
+  const itemsDiv = document.querySelector('.items');
+  const itemContentInput = document.querySelector('.item-add-window .item-content');
+  const itemDateInput = document.querySelector('.item-add-window .item-date');
+  const itemStarInput = document.querySelector('.item-add-window .item-star');
+  const itemAddButton = document.querySelector('.item-add-window .add');
+  const itemAddWindow = document.querySelector('.item-add-window');
+  const itemAddWindowOpenButton = document.querySelector('.item-add-button');
+  const itemAddWindowCloseButton = document.querySelector('.item-add-window .close');
+
+  const updateDisplay = () => {
+    projectsDiv.innerHTML = ''; // clean up the inside before pushing projects into it
+    const projects = controller.getEntireProject();
+    projects.forEach(project => {
+      const div = document.createElement('div');
+      if (project === controller.getProjectController()) {
+        div.classList.add('highlighted')
+      } // highlight the currently selected project
+      div.classList.add('project');
+      div.dataset.hash = project.hash;
+      div.innerHTML = `
+      <div class="project-text">
+        <p class="title">${project.title}</p>
+      </div>
+      <div class="project-buttons">
+        <button class="project-edit">
+          <img src="./images/edit.svg" alt="" width="20px" />
+        </button>
+        <button class="project-delete">
+          <img src="./images/delete.svg" alt="" width="20px" />
+        </button>
+      </div>`;
+      projectsDiv.appendChild(div);
+    });
+
+    itemsDiv.innerHTML = ''; // clean up the inside before pushing projects into it
+    const items = controller.getProjectController().getItems(); // current project's items
+    items.forEach(item => {
+      const div = document.createElement('div');
+      div.classList.add('item');
+      div.dataset.hash = item.hash;
+      div.innerHTML = `
+      <div class="item-text">
+            <p class="content">${item.content}</p>
+            <p class="date">By ${item.date}</p>
+          </div>
+          <div class="item-buttons">
+            <button class="item-star">
+              <img src="./images/unstar.svg" alt="" width="20px" />
+            </button>
+            <button class="item-finished">
+              <img src="./images/check.svg" alt="" width="20px" />
+            </button>
+            <button class="item-edit">
+              <img src="./images/edit.svg" alt="" width="20px" />
+            </button>
+            <button class="item-delete">
+              <img src="./images/delete.svg" alt="" width="20px" />
+            </button>
+          </div>
+      `;
+      itemsDiv.appendChild(div);
+    });
+  };
+
+  updateDisplay(); // initial render
+  list = Controller();
+
+  function addProject() {
+    const title = projectTitleInput.value;
+    projectTitleInput.value = '';
+    controller.createProject(title);
+
+    controller.switchProject(controller.getEntireProject()[controller.getEntireProject().length-1].hash);
+
+    updateDisplay(); // update the latest data after adding a new element
+  }
+  projectAddButton.addEventListener('click', addProject);
+
+  function addItem() {
+    const content = itemContentInput.value;
+    itemContentInput.value = '';
+    const date = itemDateInput.value;
+    itemDateInput.value = '';
+    const star = itemStarInput.value;
+    itemStarInput.value = '';
+
+    controller.createItem(content, date);
+
+    updateDisplay(); // update the latest data after adding a new element
+
+    itemAddWindow.classList.remove('visible');
+  }
+  itemAddButton.addEventListener('click', addItem);
+
+  function switchProject(event) {
+    const { hash } = event.target.closest('.project').dataset;
+    controller.switchProject(hash);
+    updateDisplay();
+  }
+
+  function deleteProject() {
+      controller.deleteProject();
+      if (controller.getEntireProject().length !== 0) {
+        controller.switchProject(controller.getEntireProject()[0].hash); // automatically choose the first project after project deletion
+      }
+      updateDisplay();
+    }
+
+  function editProject(event) {
+    const targetDiv = event.target.closest('.project').querySelector('.title');
+    console.log(targetDiv);
+    targetDiv.contentEditable = true;
+    event.preventDefault();
+  }
+
+  projectsDiv.addEventListener('click', (e) => {
+    switchProject(e);
+    if (e.target.closest('button')) { // if the element clicked is a button
+      if (e.target.closest('button').classList[0] === 'project-delete') {
+        deleteProject();
+      } else if (e.target.closest('button').classList[0] === 'project-edit') {
+        editProject(e);
+      }
+    }
+  }
+  );
+
+
+  itemAddWindowOpenButton.addEventListener('click', () => {
+    itemAddWindow.classList.add('visible');
+  })
+
+  itemAddWindowCloseButton.addEventListener('click', () => {
+    console.log("heyyy")
+    itemAddWindow.classList.remove('visible');
+  })
+
+
+
+
+
+
+
+
+
+
+}
+
+ScreenController();

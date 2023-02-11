@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo List</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="bundle.js"></script>
+  </head>
+  <body>
+    <div class="modal-container">
+      <dialog class="item-modal">
+        <input type="text" class="item-content-input" />
+        <input type="date" class="item-date-input" />
+        <button class="item-modal-add">Add</button>
+        <button class="item-modal-close">Close</button>
+      </dialog>
+    </div>
+    <div class="header">
+      <div class="logo">
+        <button></button>
+      </div>
+    </div>
+    <div class="sidebar">
+      <button class="project-add-button">+ PROJECT</button>
+      <div class="project-container">
+        <div class="project highlighted"></div>
+        <div class="project"></div>
+        <div class="project"></div>
+        <div class="project"></div>
+        <div class="project"></div>
+        <div class="project"></div>
+      </div>
+    </div>
+    <div class="main">
+      <button class="item-add-button">+ ITEM</button>
+      <div class="item-container">
+        <div class="item">
+          <div class="item-left">
+            <button class="item-check"></button>
+            <input type="image" src="./image/circle.svg">
+            <span class="item-title">Todo here</span>
+            <span class="item-date">2023-02-22</span>
+          </div>
+          <div class="item-right">
+            <button class="item-dots"></button>
+            <button class="item-star"></button>
+          </div>
+        </div>
+        <div class="item"></div>
+        <div class="item"></div>
+        <div class="item"></div>
+        <div class="item"></div>
+      </div>
+    </div>
+  </body>
+</html>

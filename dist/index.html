@@ -6,15 +6,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Todo List</title>
     <link rel="stylesheet" href="style.css" />
-    <script src="bundle.js"></script>
+    <script src="bundle.js" defer></script>
   </head>
   <body>
     <div class="modal-container">
-      <dialog class="item-modal">
-        <input type="text" class="item-content-input" />
-        <input type="date" class="item-date-input" />
-        <button class="item-modal-add">Add</button>
-        <button class="item-modal-close">Close</button>
+      <dialog class="project-add-modal">
+        <input type="text" class="project-add-modal-content-input" />
+        <button class="project-add-modal-add-button">Add</button>
+        <button class="project-add-modal-close-button">Close</button>
+      </dialog>
+      <dialog class="project-edit-modal">
+        <input type="text" class="project-edit-modal-content-input" />
+        <button class="project-edit-modal-edit-button">Edit</button>
+        <button class="project-edit-modal-close-button">Close</button>
+      </dialog>
+      <dialog class="item-add-modal">
+        <input type="text" class="item-add-modal-content-input" />
+        <input type="date" class="item-add-modal-date-input" />
+        <button class="item-add-modal-add-button">Add</button>
+        <button class="item-add-modal-close-button">Close</button>
+      </dialog>
+      <dialog class="item-edit-modal">
+        <input type="text" class="item-edit-modal-content-input" />
+        <input type="date" class="item-edit-modal-date-input" />
+        <button class="item-edit-modal-edit-button">Edit</button>
+        <button class="item-edit-modal-close-button">Close</button>
       </dialog>
     </div>
     <div class="header">
@@ -23,36 +39,20 @@
       </div>
     </div>
     <div class="sidebar">
-      <button class="project-add-button">+ PROJECT</button>
+      <button class="project-add-modal-open-button">+ PROJECT</button>
       <div class="project-container">
-        <div class="project highlighted"></div>
-        <div class="project"></div>
-        <div class="project"></div>
-        <div class="project"></div>
+        <div class="project highlighted">
+          <p class="project-title"></p>
+          <button class="project-edit-modal-edit-button">Edit</button>
+          <button class="project-edit-modal-delete-button">Delete</button>
+        </div>
         <div class="project"></div>
         <div class="project"></div>
       </div>
     </div>
     <div class="main">
-      <button class="item-add-button">+ ITEM</button>
-      <div class="item-container">
-        <div class="item">
-          <div class="item-left">
-            <button class="item-check"></button>
-            <input type="image" src="./image/circle.svg">
-            <span class="item-title">Todo here</span>
-            <span class="item-date">2023-02-22</span>
-          </div>
-          <div class="item-right">
-            <button class="item-dots"></button>
-            <button class="item-star"></button>
-          </div>
-        </div>
-        <div class="item"></div>
-        <div class="item"></div>
-        <div class="item"></div>
-        <div class="item"></div>
-      </div>
+      <button class="item-add-modal-open-button">+ ITEM</button>
+      <div class="item-container"></div>
     </div>
   </body>
 </html>

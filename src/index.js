@@ -2,30 +2,31 @@ import { differenceInCalendarDays } from "date-fns";
 import './style.css';
 
 function Item() {
-  const content = '';
-  const date = '';
-  const daysLeft = differenceInCalendarDays(new Date(date), new Date()) || '';
-  const finished = false;
-  const star = false;
-
-  return {
-    content,
-    date,
-    daysLeft,
-    finished,
-    star
+  const item = {
+    content : '',
+    date : '',
+    daysLeft : '',
+    finished : false,
+    star : false
   }
+
+  item.setDate = (value) => {
+    item.date = value;
+    item.daysLeft = differenceInCalendarDays(new Date(value), new Date());
+  }
+
+  return item;
 }
 
 function Project() {
   const title = '';
   const itemContainer = [];
   const sortContainer = () => {
-    itemContainer.sort((a) => a.finished ? 1 : a.star ? -1 : 0);
+    itemContainer.sort((a, b) => b.finished ? -1 : b.star ? 1 : (a.daysLeft - b.daysLeft));
   }
   const getItemContainer = () => itemContainer;
   const addItem = (item) => {
-    itemContainer.push(item);
+    itemContainer.unshift(item);
     sortContainer();
   }
   const deleteItem = (index) => {
@@ -45,7 +46,7 @@ function Board() {
   const projectContainer = [];
   const getProjectContainer = () => projectContainer;
   const addProject = (project) => {
-    projectContainer.push(project);
+    projectContainer.unshift(project);
   }
   const deleteProject = (index) => {
     projectContainer.splice(index, 1);
@@ -76,13 +77,14 @@ function Controller() {
     currentProject = mainBoard.getProjectContainer[0] || undefined;
   }
   const switchCurrentProject = (index) => {
-    currentProject = mainBoard.getProjectContainer[index];
+    currentProject = mainBoard.getProjectContainer()[index];
   }
+  const showCurrentProject = () => currentProject;
   const showItemContainer = () =>  currentProject.getItemContainer(); // show the item container of the current project
   const createItem = (content, date) => { // create a new item on the current project
     const newItem = Item();
     newItem.content = content;
-    newItem.date = date;
+    newItem.setDate(date);
     currentProject.addItem(newItem);
   }
   const editItem = (index, property, value) => {
@@ -105,7 +107,6 @@ function Controller() {
   createItem('Item 4', '2022-10-22');
   createItem('Item 3', '2022-10-22');
   createItem('Item 5', '2022-10-22');
-  createItem('Item 6', '2022-10-22');
 
   return {
     showEntireProject,
@@ -113,6 +114,7 @@ function Controller() {
     editProject,
     deleteProject,
     switchCurrentProject,
+    showCurrentProject,
     showItemContainer,
     createItem,
     editItem,
@@ -121,32 +123,67 @@ function Controller() {
 }
 
 function ScreenController() {
-  console.log("Start");
   const mainController = Controller();
+
+  const projectContainer = document.querySelector('.project-container');
+  const projectAddModalOpenButton = document.querySelector('.project-add-modal-open-button');
+  const projectAddModal = document.querySelector('.project-add-modal');
+  const projectAddModalCloseButton = document.querySelector('.project-add-modal-close-button');
+  const projectAddModalAddButton = document.querySelector('.project-add-modal-add-button');
+  const projectAddModalContentInput = document.querySelector('.project-add-modal-content-input');
+
   const itemContainer = document.querySelector('.item-container');
-  console.log(itemContainer);
-  const itemContentInput = document.querySelector('.item-content-input');
-  const itemDateInput = document.querySelector('.item-date-input');
-  const itemWindowOpenButton = document.querySelector('.item-add-button');
-  const itemAddWindow = document.querySelector('.item-modal');
-  const itemAddButton = document.querySelector('.item-modal-add');
-  const itemCloseButton = document.querySelector('.item-modal-close');
+
+  const itemAddModal = document.querySelector('.item-add-modal');
+  const itemAddModalContentInput = document.querySelector('.item-add-modal-content-input');
+  const itemAddModalDateInput = document.querySelector('.item-add-modal-date-input');
+  const itemAddModalOpenButton = document.querySelector('.item-add-modal-open-button');
+  const itemAddModalAddButton = document.querySelector('.item-add-modal-add-button');
+  const itemAddModalCloseButton = document.querySelector('.item-add-modal-close-button');
+
+  const itemEditModal = document.querySelector('.item-edit-modal');
+  const itemEditModalContentInput = document.querySelector('.item-edit-modal-content-input');
+  const itemEditModalDateInput = document.querySelector('.item-edit-modal-date-input');
+  const itemEditModalOpenButton = document.querySelector('.item-edit-modal-open-button');
+  const itemEditModalEditButton = document.querySelector('.item-edit-modal-edit-button');
+  const itemEditModalCloseButton = document.querySelector('.item-edit-modal-close-button');
 
   const updateDisplay = () => {
+    projectContainer.innerHTML = '';
+    const projects = mainController.showEntireProject();
+    projects.forEach((project, index) => {
+      const div = document.createElement('div');
+      div.dataset.index = index;
+      div.classList.add('project');
+      if (project === mainController.showCurrentProject()) {
+        div.classList.add('highlighted');
+      }
+      div.innerHTML = `
+      <p class="project-title">${project.title}</p>
+      <button class="project-edit-modal-edit-button">Edit</button>
+      <button class="project-edit-modal-close-button">Close</button>
+      `;
+      projectContainer.append(div);
+    });
+
     itemContainer.innerHTML = ''; // clean up the inside before pushing projects into it
     const items = mainController.showItemContainer(); // current project's items
-    items.forEach(item => {
+    items.forEach((item, index) => {
       const div = document.createElement('div');
+      div.dataset.index = index;
       div.classList.add('item');
+      const date = item.daysLeft ? item.daysLeft >= 1 ? `( ${item.daysLeft} days left )` : `( ${item.daysLeft} days ago )` : '';
+      // if daysLeft >= 1 it shows ...days left 
       div.innerHTML = `
       <div class="item-left">
       <button class="item-check"></button>
       <span class="item-title">${item.content}</span>
-      <span class="item-date">${item.date}</span>
+      <span class="item-date">${date}</span>
     </div>
     <div class="item-right">
-      <button class="item-dots"></button>
-      <button class="item-star"></button>
+    <button class="item-star"></button>
+      <button class="item-edit"></button>
+      <button class="item-delete"></button>
     </div>
       `;
       if (item.star) {
@@ -160,6 +197,98 @@ function ScreenController() {
   };
 
   updateDisplay(); // initial render
+
+  // manipulate items
+  itemContainer.addEventListener('click', (e) => {
+    const targetItem = e.target.closest('.item');
+    const targetClass = e.target.classList[0]
+    const targetIndex = targetItem.dataset.index;
+
+    if (targetClass === 'item-check') {
+      const value = ![...targetItem.classList].includes('finished');
+      mainController.editItem(targetIndex, 'finished', value)
+      updateDisplay();
+    } else if (targetClass === 'item-star') {
+      const value = ![...targetItem.classList].includes('star');
+      mainController.editItem(targetIndex, 'star', value)
+      updateDisplay();
+    } else if (targetClass === 'item-edit') {
+      const arr = mainController.showItemContainer();
+      itemEditModal.show();
+      const {content} = arr[targetIndex];
+      const {date} = arr[targetIndex];
+      itemEditModalContentInput.value = arr[targetIndex].content;
+      itemEditModalDateInput.value = arr[targetIndex].date;
+      itemEditModalEditButton.addEventListener('click', () => {
+        mainController.editItem(targetIndex, 'content', content);
+        mainController.editItem(targetIndex, 'date', date);
+        itemEditModal.close();
+        updateDisplay();
+        itemEditModalContentInput.value = '';
+        itemEditModalDateInput.value = '';
+      });
+    } else if (targetClass === 'item-delete') {
+      mainController.removeItem(targetIndex);
+      updateDisplay();
+    }
+  })
+
+  // item add modal
+  itemAddModalOpenButton.addEventListener('click', () => {
+    itemAddModal.show();
+  })
+  itemAddModalCloseButton.addEventListener('click', () => {
+    itemAddModal.close();
+  })
+  itemAddModalAddButton.addEventListener('click', () => {
+    const content = itemAddModalContentInput.value;
+    itemAddModalContentInput.value = '';
+    const date = itemAddModalDateInput.value;
+    itemAddModalDateInput.value = '';
+    mainController.createItem(content, date);
+    updateDisplay();
+    itemAddModal.close();
+  })
+
+  itemEditModalCloseButton.addEventListener('click', () => {
+    itemEditModal.close();
+  });
+
+  // project add modal
+  projectAddModalOpenButton.addEventListener('click', () => {
+    projectAddModal.show();
+  })
+
+  projectAddModalCloseButton.addEventListener('click', () => {
+    projectAddModal.close();
+  })
+
+  projectAddModalAddButton.addEventListener('click', () => {
+    const content = projectAddModalContentInput.value;
+    projectAddModalContentInput.value = '';
+    mainController.createProject(content);
+    updateDisplay();
+    projectAddModal.close();
+  })
+
+  projectContainer.addEventListener('click', (e) => {
+    const targetProjectIndex = e.target.closest('.project').dataset.index;
+    mainController.switchCurrentProject(targetProjectIndex);
+    console.log(mainController.showCurrentProject());
+    updateDisplay();
+  })
+
+
+
+
+
+
+
+
+
+
+  
+
 
 
 

@@ -64,17 +64,13 @@ body {
   margin: 20px 0px;
 }
 
-.sidebar .project-add-button {
+.sidebar .project-add-modal-open-button {
   border: none;
   cursor: pointer;
   width: 100%;
   padding: 10px 30px;
   border-radius: 10px;
   border: 1px solid white;
-}
-
-.sidebar .project-add-button:hover {
-  border: 1px solid black;
 }
 
 /* content */
@@ -84,7 +80,7 @@ body {
   padding: 20px 50px;
 }
 
-.main .item-add-button {
+.main .item-add-modal-open-button {
   border: none;
   cursor: pointer;
   width: 100%;
@@ -96,17 +92,13 @@ body {
 .main .item-container {
   max-height: 600px;
   overflow: auto;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .main .item-container .item {
   border-bottom: 1px solid black;
   width: 90%;
   height: 40px;
-  margin: 20px 0px;
+  margin: 25px;
 
   display: flex;
   align-items: center;
@@ -133,16 +125,20 @@ body {
   background-image: url("./images/check.svg");
 }
 
+.item.finished .item-title {
+  text-decoration: line-through;
+}
+
+.item.star .item-title {
+  font-weight: bold;
+}
+
 .main .item-container .item-left .item-check:hover {
   background-image: url("./images/check.svg");
 }
 
 .main .item-container .item-left .item-date {
-  border: 1px solid black;
-  border-radius: 10px;
-
   font-size: 0.7em;
-  padding: 0px 10px;
 }
 
 .main .item-container .item-right {
@@ -151,20 +147,30 @@ body {
   gap: 10px;
 }
 
-.main .item-container .item-right .item-dots {
+.main .item-container .item-right .item-star {
   border: none;
   background: none;
-  background-image: url("./images/dots.svg");
+  background-image: url("./images/unstar.svg");
   background-size: 20px;
   width: 20px;
   height: 20px;
   cursor: pointer;
 }
 
-.main .item-container .item-right .item-star {
+.item-edit {
   border: none;
   background: none;
-  background-image: url("./images/unstar.svg");
+  background-image: url("./images/edit.svg");
+  background-size: 20px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.item-delete {
+  border: none;
+  background: none;
+  background-image: url("./images/delete.svg");
   background-size: 20px;
   width: 20px;
   height: 20px;
@@ -179,18 +185,59 @@ body {
   background-image: url("./images/star.svg");
 }
 
-/* pop-ups */
-.modal-container .item-modal {
-  width: 400px;
-  height: 300px;
+/* modals */
+.modal-container .item-add-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -150px;
+  margin-top: -50px;
+  width: 300px;
+  height: 100px;
   background-color: white;
   border-radius: 10px;
   border: none;
   box-shadow: 0px 0px 10px lightgray;
-  z-index: 99;
 }
 
-.modal-container .item-modal::backdrop {
+.modal-container .item-edit-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -150px;
+  margin-top: -50px;
+  width: 300px;
+  height: 100px;
   background-color: white;
-  opacity: 0.8;
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0px 0px 10px lightgray;
+}
+
+.project-add-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -150px;
+  margin-top: -50px;
+  width: 300px;
+  height: 100px;
+  background-color: white;
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0px 0px 10px lightgray;
+}
+
+.project-edit-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -150px;
+  margin-top: -50px;
+  width: 300px;
+  height: 100px;
+  background-color: white;
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0px 0px 10px lightgray;
 }

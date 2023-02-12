@@ -161,7 +161,7 @@ function ScreenController() {
       div.innerHTML = `
       <p class="project-title">${project.title}</p>
       <button class="project-edit-modal-edit-button">Edit</button>
-      <button class="project-edit-modal-close-button">Close</button>
+      <button class="project-edit-modal-delete-button">Delete</button>
       `;
       projectContainer.append(div);
     });
@@ -287,7 +287,7 @@ function ScreenController() {
 
 
 
-  
+
 
 
 
